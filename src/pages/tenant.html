@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h3 {
+            color: #2c3e50;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: white;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .search-bar img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .add-button {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-button img {
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .status-icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-icon img {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        .status-active img {
+            filter: brightness(0) saturate(100%) invert(43%) sepia(84%) saturate(400%) hue-rotate(106deg) brightness(97%) contrast(95%);
+        }
+
+        .status-inactive img {
+            filter: brightness(0) saturate(100%) invert(19%) sepia(97%) saturate(338%) hue-rotate(359deg) brightness(91%) contrast(88%);
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Inquilinos</h3>
+    <div class="actions">
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquisar inquilino...">
+            <img src="../assets/search.png" alt="Pesquisar">
+        </div>
+        <a class="add-button" href="add-tenant.html">
+            <img src="../assets/add.png" alt="Adicionar">
+            Adicionar Inquilino
+        </a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>cpf</th>
+                <th>Nome</th>
+                <th>Contato</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>097.382.356-93</td>
+                <td>João Silva</td>
+                <td>+55 11 98765-4321</td>
+                <td>joao.silva@example.com</td>
+                <td class="status-icon status-active">
+                    <img src="../assets/active.png" alt="Ativo">
+                    Ativo
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

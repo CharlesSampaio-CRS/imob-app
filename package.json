@@ -1,5 +1,5 @@
 {
-  "name": "space-app",
+  "name": "Imob",
   "version": "1.0.0",
   "description": "A simple Electron app to convert YAML to Properties and vice versa.",
   "main": "main.js",
@@ -7,12 +7,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
     "electron": "^25.9.8",
     "js-yaml": "^4.1.0",
-    "mongo": "^0.1.0",
-    "mongodb": "^6.10.0",
-    "properties-reader": "^2.1.1",
-    "ws": "^8.18.0"
+    "properties-reader": "^2.1.1"
   }
 }

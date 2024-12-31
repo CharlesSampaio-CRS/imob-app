@@ -7,8 +7,8 @@ let mainWindow;
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
+        width: 1600,  // Aumentando a largura da janela
+        height: 1000, // Aumentando a altura da janela
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -17,7 +17,7 @@ function createMainWindow() {
         autoHideMenuBar: true,
     });
 
-    mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
+    mainWindow.loadFile(path.join(__dirname, 'src', 'pages/index.html'));
 
     mainWindow.on('resize', () => {
         const { width, height } = mainWindow.getContentBounds();

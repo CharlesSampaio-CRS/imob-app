@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Imob</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 50px;
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar-item {
+            margin: 10px 0;
+            cursor: pointer;
+            width: 40px; /* Aumentado para melhorar o espaçamento */
+            height: 40px; /* Aumentado para melhorar o espaçamento */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar-item.active-icon {
+            background-color: #707b86;
+            border-radius: 5px;
+        }
+
+        .icon {
+            width: 30px; /* Aumentado */
+            height: 30px; /* Aumentado */
+        }
+
+        #content {
+            flex-grow: 1;
+            background-color: #ecf0f1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="menu-items">
+            <div class="sidebar-item" id="home" title="Inicio">
+                <img src="../assets/home.png" alt="Inicio" class="icon">
+            </div>
+            <div class="sidebar-item" id="rental" title="Locação">
+                <img src="../assets/rental.png" alt="Locação" class="icon">
+            </div>
+            <div class="sidebar-item" id="whats" title="Propriedade">
+                <img src="../assets/property.png" alt="Propriedade" class="icon">
+            </div>
+            <div class="sidebar-item" id="tenant" title="Inquilino">
+                <img src="../assets/tenant.png" alt="Inquilino" class="icon">
+            </div>
+            <div class="sidebar-item" id="graficos" title="Gráfico">
+                <img src="../assets/chart.png" alt="Gráfico" class="icon">
+            </div>
+        </div>
+        <div class="sidebar-item" id="sair" title="Sair">
+            <img src="../assets/logout.png" alt="Sair" class="icon">
+        </div>
+    </div>
+
+    <div id="content">
+        <iframe id="content-frame" src=""></iframe>
+    </div>
+
+    <script>
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const iframe = document.getElementById('content-frame');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.id === 'sair') {
+                    alert('Encerrando a aplicação...');
+                    window.close();
+                    return;
+                }
+
+                let targetPage = '';
+
+                if (item.id === 'home') {
+                    targetPage = 'page-home.html';
+                } else if (item.id === 'whats') {
+                    targetPage = 'property.html';
+                } else if (item.id === 'tenant') {
+                    targetPage = '../pages/tenant.html';
+                } else if (item.id === 'rental') {
+                    targetPage = 'rental.html';
+                } else if (item.id === 'graficos') {
+                    targetPage = 'chart.html';
+                }
+
+                if (targetPage) {
+                    iframe.src = targetPage;
+                }
+
+                // Alterar o destaque no ícone ativo
+                sidebarItems.forEach(sidebarItem => {
+                    sidebarItem.classList.remove('active-icon');
+                });
+                item.classList.add('active-icon');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Inquilino</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #3498db;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .add-item {
+            cursor: pointer;
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .reference-item,
+        .goods-item {
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #c0392b;
+        }
+
+        .save-button {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background-color: #27ae60;
+        }
+            
+        .add-item-button {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: underline;
+ }
+
+    .add-item-button:hover {
+        background-color: #2980b9;
+    }
+
+        /* Escondendo as seções de Referências e Bens inicialmente */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-button" onclick="confirmBack()">Voltar</button>
+    <h1>Adicionar Inquilino</h1>
+    <form id="tenantForm">
+        <!-- Informações Pessoais -->
+        <div class="section-title">Informações Pessoais</div>
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" placeholder="CPF" required>
+
+        <label for="name">Nome</label>
+        <input type="text" id="name" placeholder="Nome completo" required>
+
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" placeholder="Telefone" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email" required>
+
+        <label for="birthDate">Data de Nascimento</label>
+        <input type="date" id="birthDate" required>
+
+        <label for="naturalness">Naturalidade</label>
+        <input type="text" id="naturalness" placeholder="Naturalidade" required>
+
+        <label for="nationality">Nacionalidade</label>
+        <input type="text" id="nationality" placeholder="Nacionalidade" required>
+
+        <label for="maritalStatus">Estado Civil</label>
+        <input type="text" id="maritalStatus" placeholder="Estado Civil" required>
+
+        <label for="motherName">Nome da Mãe</label>
+        <input type="text" id="motherName" placeholder="Nome da Mãe" required>
+
+        <label for="fatherName">Nome do Pai</label>
+        <input type="text" id="fatherName" placeholder="Nome do Pai" required>
+
+        <!-- Informações do Cônjuge -->
+        <div class="section-title">Informações do Cônjuge</div>
+        <label for="spouseName">Nome</label>
+        <input type="text" id="spouseName" placeholder="Nome do cônjuge" required>
+
+        <label for="spouseCpf">CPF</label>
+        <input type="text" id="spouseCpf" placeholder="CPF do cônjuge" required>
+
+        <label for="spousePhone">Telefone</label>
+        <input type="text" id="spousePhone" placeholder="Telefone do cônjuge" required>
+
+        <label for="spouseEmail">Email</label>
+        <input type="email" id="spouseEmail" placeholder="Email do cônjuge" required>
+
+        <label for="spouseBirthDate">Data de Nascimento</label>
+        <input type="date" id="spouseBirthDate" required>
+
+        <label for="spouseNaturalness">Naturalidade</label>
+        <input type="text" id="spouseNaturalness" placeholder="Naturalidade do cônjuge" required>
+
+        <label for="spouseNationality">Nacionalidade</label>
+        <input type="text" id="spouseNationality" placeholder="Nacionalidade do cônjuge" required>
+
+        <label for="spouseMaritalStatus">Estado Civil</label>
+        <input type="text" id="spouseMaritalStatus" placeholder="Estado Civil do cônjuge" required>
+
+        <label for="spouseMotherName">Nome da Mãe</label>
+        <input type="text" id="spouseMotherName" placeholder="Nome da mãe do cônjuge" required>
+
+        <label for="spouseFatherName">Nome do Pai</label>
+        <input type="text" id="spouseFatherName" placeholder="Nome do pai do cônjuge" required>
+
+        <div class="section-title">Ocupação do Cônjuge</div>
+        <label for="spouseOccupationCompanyName">Empresa</label>
+        <input type="text" id="spouseOccupationCompanyName" placeholder="Nome da empresa" required>
+
+        <label for="spouseOccupationPosition">Cargo</label>
+        <input type="text" id="spouseOccupationPosition" placeholder="Cargo" required>
+
+        <label for="spouseOccupationType">Tipo de Ocupação</label>
+        <input type="text" id="spouseOccupationType" placeholder="Tipo de ocupação" required>
+
+        <label for="spouseOccupationCompanyAddress">Endereço da Empresa</label>
+        <input type="text" id="spouseOccupationCompanyAddress" placeholder="Endereço da empresa" required>
+
+        <label for="spouseOccupationSalary">Salário</label>
+        <input type="number" id="spouseOccupationSalary" placeholder="Salário" required>
+
+        <!-- Endereço -->
+        <div class="section-title">Endereço</div>
+        <label for="street">Rua</label>
+        <input type="text" id="street" placeholder="Rua" required>
+
+        <label for="number">Número</label>
+        <input type="text" id="number" placeholder="Número" required>
+
+        <label for="complement">Complemento</label>
+        <input type="text" id="complement" placeholder="Complemento">
+
+        <label for="neighborhood">Bairro</label>
+        <input type="text" id="neighborhood" placeholder="Bairro" required>
+
+        <label for="city">Cidade</label>
+        <input type="text" id="city" placeholder="Cidade" required>
+
+        <label for="state">Estado</label>
+        <input type="text" id="state" placeholder="Estado" required>
+
+        <label for="country">País</label>
+        <input type="text" id="country" placeholder="País" required>
+
+        <label for="postalCode">CEP</label>
+        <input type="text" id="postalCode" placeholder="CEP" required>
+
+        <!-- Referências -->
+        <div class="section-title">Referências</div>
+        <div id="references" class="hidden"></div>
+        <button type="button" class="add-item-button" onclick="addReference()">Adicionar Referência</button>
+
+
+        <!-- Bens -->
+        <div class="section-title">Bens</div>
+        <div id="goods" class="hidden"></div>
+        <button type="button" class="add-item-button" onclick="addGood()">Adicionar Bem</button>
+
+
+        <!-- Botão Salvar -->
+        <button type="submit" class="save-button" onclick="saveTenant(event)">Salvar Inquilino</button>
+    </form>
+
+    <script>
+        function addReference() {
+            const referenceSection = document.getElementById('references');
+            const newReference = document.createElement('div');
+            newReference.classList.add('reference-item');
+            newReference.innerHTML = `
+                <label for="referenceName">Nome</label>
+                <input type="text" class="referenceName" placeholder="Nome da referência" required>
+
+                <label for="referencePhone">Telefone</label>
+                <input type="text" class="referencePhone" placeholder="Telefone da referência" required>
+
+                <label for="referenceRelationship">Relacionamento</label>
+                <input type="text" class="referenceRelationship" placeholder="Relacionamento com o inquilino" required>
+            `;
+            referenceSection.appendChild(newReference);
+            referenceSection.classList.remove('hidden');
+        }
+
+        function addGood() {
+            const goodsSection = document.getElementById('goods');
+            const newGood = document.createElement('div');
+            newGood.classList.add('goods-item');
+            newGood.innerHTML = `
+                <label for="goodsType">Tipo de Bem</label>
+                <input type="text" class="goodsType" placeholder="Tipo de bem" required>
+
+                <label for="goodsDescription">Descrição do Bem</label>
+                <input type="text" class="goodsDescription" placeholder="Descrição do bem" required>
+
+                <label for="goodsValue">Valor do Bem</label>
+                <input type="number" class="goodsValue" placeholder="Valor do bem" required>
+            `;
+            goodsSection.appendChild(newGood);
+            goodsSection.classList.remove('hidden');
+        }
+
+        function confirmBack() {
+            if (confirm("Tem certeza de que deseja voltar? Todos os dados não salvos serão perdidos.")) {
+                window.history.back();
+            }
+        }
+
+        function saveTenant(event) {
+            event.preventDefault(); // Evita o envio do formulário padrão
+            window.location.href = 'tenant.html'; // Redireciona para tenant.html
+        }
+    </script>
+</body>
+
+</html>

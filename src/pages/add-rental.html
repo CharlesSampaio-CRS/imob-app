@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Aluguel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .section-title {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #3498db;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #c0392b;
+        }
+
+        .save-button {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background-color: #27ae60;
+        }
+
+        .autocomplete-container {
+            position: relative;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            border: 1px solid #ddd;
+            background-color: white;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestion:hover {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-button" onclick="confirmBack()">Voltar</button>
+    <h1>Adicionar Aluguel</h1>
+    <form id="rentalForm">
+        <!-- Inquilino e Propriedade -->
+        <div class="section-title">Inquilino e Propriedade</div>
+
+        <label for="tenantSearch">Inquilino</label>
+        <div class="autocomplete-container">
+            <input type="text" id="tenantSearch" placeholder="Digite o nome do inquilino" required>
+            <div id="tenantSuggestions" class="autocomplete-suggestions"></div>
+        </div>
+
+        <label for="propertySearch">Propriedade </label>
+        <div class="autocomplete-container">
+            <input type="text" id="propertySearch" placeholder="Digite o numero da propriedade" required>
+            <div id="propertySuggestions" class="autocomplete-suggestions"></div>
+        </div>
+
+        <!-- Informações do Aluguel -->
+        <div class="section-title">Informações do Aluguel</div>
+        
+        <label for="rentalValue">Valor do Aluguel</label>
+        <input type="number" id="rentalValue" placeholder="Valor do aluguel" required>
+
+        <label for="inputValue">Valor de Entrada</label>
+        <input type="number" id="inputValue" placeholder="Valor de entrada" required>
+
+        <label for="adminValue">Valor de Administração</label>
+        <input type="number" id="adminValue" placeholder="Valor de administração" required>
+
+        <label for="dueDate">Data de Vencimento</label>
+        <input type="date" id="dueDate" required>
+
+        <label for="paid">Pago?</label>
+        <select id="paid" required>
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+        </select>
+
+        <label for="initDate">Data de Início</label>
+        <input type="date" id="initDate" required>
+
+        <label for="finalDate">Data Final</label>
+        <input type="date" id="finalDate" required>
+
+        <label for="typeWarranty">Tipo de Garantia</label>
+        <select id="typeWarranty" required>
+            <option value="CAPITALIZATION">Capitalização</option>
+            <option value="GUARANTEE">Garantia</option>
+            <option value="DEPOSIT">Depósito</option>
+            <option value="INSURANCE">Seguro</option>
+        </select>
+
+        <!-- Botões -->
+        <button type="submit" class="save-button">Salvar Aluguel</button>
+    </form>
+
+    <script>
+        function confirmBack() {
+            if (confirm("Tem certeza de que deseja voltar? Todos os dados não salvos serão perdidos.")) {
+                window.history.back();
+            }
+        }
+
+        // Função de sugestão de autocompletar (simulada)
+        function setupAutocomplete(inputId, suggestionsContainerId, data) {
+            const input = document.getElementById(inputId);
+            const suggestionsContainer = document.getElementById(suggestionsContainerId);
+
+            input.addEventListener('input', function() {
+                const query = input.value.toLowerCase();
+                suggestionsContainer.innerHTML = '';
+                if (query.length > 0) {
+                    const filteredData = data.filter(item => item.toLowerCase().includes(query));
+                    filteredData.forEach(item => {
+                        const suggestion = document.createElement('div');
+                        suggestion.classList.add('autocomplete-suggestion');
+                        suggestion.textContent = item;
+                        suggestion.addEventListener('click', function() {
+                            input.value = item;
+                            suggestionsContainer.innerHTML = '';
+                        });
+                        suggestionsContainer.appendChild(suggestion);
+                    });
+                }
+            });
+        }
+
+        // Dados simulados para inquilinos e propriedades
+        const tenants = ["João Silva", "Maria Souza", "Carlos Pereira"];
+        const properties = ["Apartamento 101", "Casa Verde", "Imóvel Comercial Centro"];
+
+        // Configuração de autocompletar
+        setupAutocomplete('tenantSearch', 'tenantSuggestions', tenants);
+        setupAutocomplete('propertySearch', 'propertySuggestions', properties);
+
+        // Função para salvar o aluguel
+        document.getElementById('rentalForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evita o envio do formulário
+            alert("Aluguel salvo com sucesso!");
+        });
+    </script>
+</body>
+
+</html>
