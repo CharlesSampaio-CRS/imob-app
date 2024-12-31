@@ -125,15 +125,15 @@
         <!-- Inquilino e Propriedade -->
         <div class="section-title">Inquilino e Propriedade</div>
 
-        <label for="tenantSearch">Inquilino</label>
+        <label for="tenantSearch">Inquilino (por CPF)</label>
         <div class="autocomplete-container">
-            <input type="text" id="tenantSearch" placeholder="Digite o nome do inquilino" required>
+            <input type="text" id="tenantSearch" placeholder="Digite o CPF do inquilino" required>
             <div id="tenantSuggestions" class="autocomplete-suggestions"></div>
         </div>
 
-        <label for="propertySearch">Propriedade </label>
+        <label for="propertySearch">Propriedade</label>
         <div class="autocomplete-container">
-            <input type="text" id="propertySearch" placeholder="Digite o numero da propriedade" required>
+            <input type="text" id="propertySearch" placeholder="Digite o número da propriedade" required>
             <div id="propertySuggestions" class="autocomplete-suggestions"></div>
         </div>
 
@@ -183,43 +183,149 @@
             }
         }
 
-        // Função de sugestão de autocompletar (simulada)
-        function setupAutocomplete(inputId, suggestionsContainerId, data) {
-            const input = document.getElementById(inputId);
-            const suggestionsContainer = document.getElementById(suggestionsContainerId);
-
-            input.addEventListener('input', function() {
-                const query = input.value.toLowerCase();
-                suggestionsContainer.innerHTML = '';
-                if (query.length > 0) {
-                    const filteredData = data.filter(item => item.toLowerCase().includes(query));
-                    filteredData.forEach(item => {
-                        const suggestion = document.createElement('div');
-                        suggestion.classList.add('autocomplete-suggestion');
-                        suggestion.textContent = item;
-                        suggestion.addEventListener('click', function() {
-                            input.value = item;
-                            suggestionsContainer.innerHTML = '';
-                        });
-                        suggestionsContainer.appendChild(suggestion);
-                    });
+        async function searchTenantByCPF(cpf) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/tenant/${cpf}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
                 }
-            });
+            } catch (error) {
+                console.error('Erro ao buscar inquilino:', error);
+            }
+            return null;
         }
 
-        // Dados simulados para inquilinos e propriedades
-        const tenants = ["João Silva", "Maria Souza", "Carlos Pereira"];
-        const properties = ["Apartamento 101", "Casa Verde", "Imóvel Comercial Centro"];
+        async function searchPropertyByNumber(propertyNumber) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/property/${propertyNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                }
+            } catch (error) {
+                console.error('Erro ao buscar propriedade:', error);
+            }
+            return null;
+        }
 
-        // Configuração de autocompletar
-        setupAutocomplete('tenantSearch', 'tenantSuggestions', tenants);
-        setupAutocomplete('propertySearch', 'propertySuggestions', properties);
+        function setupAutocomplete(inputId, suggestionsContainerId, searchFunction) {
+    const input = document.getElementById(inputId);
+    const suggestionsContainer = document.getElementById(suggestionsContainerId);
 
-        // Função para salvar o aluguel
-        document.getElementById('rentalForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Evita o envio do formulário
-            alert("Aluguel salvo com sucesso!");
+    input.addEventListener('blur', async function() {
+        const query = input.value.trim();
+        suggestionsContainer.innerHTML = '';
+        if (query.length >= 1 && /^\d+$/.test(query)) { // Verifica se é um número válido
+            const data = await searchFunction(query);
+            let inputData = '';
+            if (data) {
+                // Verifica se o objeto data possui as propriedades necessárias antes de tentar acessá-las
+                const suggestion = document.createElement('div');
+                suggestion.classList.add('autocomplete-suggestion');
+
+                // Verifica se data tem a propriedade 'name', se não, usa outras propriedades
+                if (data.person != null && data.person.name) {
+                    suggestion.textContent = `${data.person.name}`;
+                    inputData = data.tenantNumber;
+                } else if (data.propertyNumber) {
+                    suggestion.textContent = `${data.propertyNumber}`;
+                    inputData = data.propertyNumber;
+                } else {
+                    suggestion.textContent = "Resultado não encontrado";
+                }
+
+                suggestion.addEventListener('click', function() {
+                    input.value = inputData;
+                    suggestionsContainer.innerHTML = ''; 
+                });
+                suggestionsContainer.appendChild(suggestion);
+            } else {
+                const noResults = document.createElement('div');
+                noResults.textContent = "Nenhum resultado encontrado.";
+                suggestionsContainer.appendChild(noResults);
+            }
+        }
+    });
+}
+
+
+        setupAutocomplete('tenantSearch', 'tenantSuggestions', searchTenantByCPF);
+        setupAutocomplete('propertySearch', 'propertySuggestions', searchPropertyByNumber);
+
+    document.getElementById('rentalForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Evita o envio do formulário
+
+    // Coleta os dados do formulário
+    let tenantNumber =document.getElementById('tenantSearch').value;
+    let propertyNumber = document.getElementById('propertySearch').value;
+    const rentalValue = parseFloat(document.getElementById('rentalValue').value);
+    const inputValue = parseFloat(document.getElementById('inputValue').value);
+    const adminValue = parseFloat(document.getElementById('adminValue').value);
+    let dueDate = document.getElementById('dueDate').value;
+    const paid = document.getElementById('paid').value === "true";
+    let initDate = document.getElementById('initDate').value;
+    let finalDate = document.getElementById('finalDate').value;
+    const typeWarranty = document.getElementById('typeWarranty').value;
+
+    if (dueDate) {
+        dueDate += "T00:00:00"; // Adiciona a hora para garantir o formato LocalDateTime
+    }
+    if (initDate) {
+        initDate += "T00:00:00"; // Adiciona a hora para garantir o formato LocalDateTime
+    }
+    if (finalDate) {
+        finalDate += "T00:00:00"; // Adiciona a hora para garantir o formato LocalDateTime
+    }
+
+    const rentalData = {
+        tenantNumber,
+        propertyNumber,
+        rentalValue,
+        inputValue,
+        adminValue,
+        dueDate,
+        paid,
+        initDate,
+        finalDate,
+        typeWarranty
+    };
+
+    console.log(rentalData)
+    try {
+        // Realiza a requisição POST para salvar o aluguel
+        const response = await fetch('http://localhost:8080/api/rental', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(rentalData)
         });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert("Aluguel salvo com sucesso!");
+            console.log("Aluguel salvo:", data);
+        } else {
+            alert("Erro ao salvar aluguel. Tente novamente.");
+            console.error("Erro ao salvar aluguel:", response.statusText);
+        }
+    } catch (error) {
+        alert("Erro ao salvar aluguel. Tente novamente.");
+        console.error("Erro na requisição:", error);
+    }
+});
+
     </script>
 </body>
 
