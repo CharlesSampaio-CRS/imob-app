@@ -1,0 +1,32 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Build files
+dist/
+out/
+
+# Environment variables
+.env
+
+# Electron specific
+/temp/
+*.asar
+
+# Others
+*.bak
+*.tmp
