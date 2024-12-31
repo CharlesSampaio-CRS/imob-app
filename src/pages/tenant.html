@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquilinos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,7 +67,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
@@ -103,6 +105,12 @@
         .status-inactive img {
             filter: brightness(0) saturate(100%) invert(19%) sepia(97%) saturate(338%) hue-rotate(359deg) brightness(91%) contrast(88%);
         }
+
+        .edit-button img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -121,86 +129,52 @@
     <table>
         <thead>
             <tr>
-                <th>cpf</th>
+                <th>Ações</th>
+                <th>CPF</th>
+                <th>Nº Inquilino</th>
                 <th>Nome</th>
-                <th>Contato</th>
-                <th>Email</th>
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
-            <tr>
-                <td>097.382.356-93</td>
-                <td>João Silva</td>
-                <td>+55 11 98765-4321</td>
-                <td>joao.silva@example.com</td>
-                <td class="status-icon status-active">
-                    <img src="../assets/active.png" alt="Ativo">
-                    Ativo
-                </td>
-            </tr>
+        <tbody id="tenantTableBody">
         </tbody>
     </table>
+
+    <script type="module">
+        import { fetchTenants } from '../../services/tenantService.js';
+
+        function renderTenants(tenants) {
+            const tableBody = document.getElementById('tenantTableBody');
+            tableBody.innerHTML = ''; 
+
+            tenants.forEach(tenant => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <a class="edit-button" href="edit-tenant.html?id=${tenant.tenantNumber}">
+                            <img src="../assets/edit.png" alt="Editar">
+                        </a>
+                    </td>
+                    <td>${tenant.cpf || 'N/A'}</td>
+                    <td>${tenant.tenantNumber || 'N/A'}</td>
+                    <td>${tenant.name || 'N/A'}</td>
+                    <td class="status-icon ${tenant.status ? 'status-active' : 'status-inactive'}">
+                        <img src="../assets/${tenant.status ? 'active' : 'inactive'}.png" alt="${tenant.status ? 'Ativo' : 'Inativo'}">
+                        ${tenant.status ? 'Ativo' : 'Inativo'}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTenants()
+                .then(renderTenants)
+                .catch(error => {
+                    console.error('Erro ao buscar inquilinos:', error);
+                });
+        });
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Propriedade</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 20px auto;
+            flex-grow: 1;
+            overflow-y: auto;
+            height: calc(100vh - 40px); /* Formulário ocupa toda a altura da tela */
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .input-group input, .input-group select {
+            width: 48%;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+
+        .back-button:before {
+            content: '←';
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-button" onclick="window.history.back()"></button>
+
+    <h3>Editar Propriedade</h3>
+
+    <form id="edit-property-form">
+        <fieldset>
+            <legend>Informações da Propriedade</legend>
+            <label for="property-number">Número da Propriedade</label>
+            <input type="text" id="property-number" name="property-number" readonly>
+
+            <div class="input-group">
+                <div>
+                    <label for="property-type">Tipo de Propriedade</label>
+                    <select id="property-type" name="property-type">
+                        <option value="RESIDENTIAL">Residencial</option>
+                        <option value="COMMERCIAL">Comercial</option>
+                        <option value="INDUSTRIAL">Industrial</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="property-status">Status</label>
+                    <select id="property-status" name="property-status">
+                        <option value="RENTED">Alugada</option>
+                        <option value="AVAILABLE">Disponível</option>
+                    </select>
+                </div>
+            </div>
+
+            <label for="property-value">Valor</label>
+            <input type="text" id="property-value" name="property-value" placeholder="R$ 0,00">
+        </fieldset>
+
+        <fieldset>
+            <legend>Informações do Proprietário</legend>
+            <label for="owner-name">Nome</label>
+            <input type="text" id="owner-name" name="owner-name">
+
+            <label for="owner-cpf">CPF</label>
+            <input type="text" id="owner-cpf" name="owner-cpf" readonly>
+
+            <label for="owner-phone">Telefone</label>
+            <input type="text" id="owner-phone" name="owner-phone">
+
+            <label for="owner-email">Email</label>
+            <input type="email" id="owner-email" name="owner-email">
+        </fieldset>
+
+        <fieldset>
+            <legend>Endereço</legend>
+            <div class="input-group">
+                <div>
+                    <label for="address-street">Rua</label>
+                    <input type="text" id="address-street" name="address-street">
+                </div>
+                <div>
+                    <label for="address-number">Número</label>
+                    <input type="text" id="address-number" name="address-number">
+                </div>
+            </div>
+
+            <label for="address-complement">Complemento</label>
+            <input type="text" id="address-complement" name="address-complement">
+
+            <div class="input-group">
+                <div>
+                    <label for="address-neighborhood">Bairro</label>
+                    <input type="text" id="address-neighborhood" name="address-neighborhood">
+                </div>
+                <div>
+                    <label for="address-city">Cidade</label>
+                    <input type="text" id="address-city" name="address-city">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div>
+                    <label for="address-state">Estado</label>
+                    <input type="text" id="address-state" name="address-state">
+                </div>
+
+                <div>
+                    <label for="address-postal-code">CEP</label>
+                    <input type="text" id="address-postal-code" name="address-postal-code">
+                </div>
+            </div>
+        </fieldset>
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <script>
+        const propertyData = {
+            "id": "6772059cca527d0400e76d19",
+            "propertyNumber": 1000001,
+            "typeProperty": "RESIDENTIAL",
+            "status": "RENTED",
+            "owner": {
+                "cpf": "12345678901",
+                "name": "João Silva",
+                "phone": "+55 11 98765-4321",
+                "email": "joao.silva@example.com",
+            },
+            "value": 500000.0,
+            "address": {
+                "street": "Rua das Flores",
+                "number": "123",
+                "complement": "Apto 4500",
+                "neighborhood": "Jardim das Acácias",
+                "city": "São Paulo",
+                "state": "SP",
+                "postalCode": "01234-567"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('property-number').value = propertyData.propertyNumber;
+            document.getElementById('property-type').value = propertyData.typeProperty;
+            document.getElementById('property-status').value = propertyData.status;
+            document.getElementById('property-value').value = `R$ ${propertyData.value.toFixed(2).replace('.', ',')}`;
+            
+            document.getElementById('owner-name').value = propertyData.owner.name;
+            document.getElementById('owner-cpf').value = propertyData.owner.cpf;
+            document.getElementById('owner-phone').value = propertyData.owner.phone;
+            document.getElementById('owner-email').value = propertyData.owner.email;
+
+            document.getElementById('address-street').value = propertyData.address.street;
+            document.getElementById('address-number').value = propertyData.address.number;
+            document.getElementById('address-complement').value = propertyData.address.complement;
+            document.getElementById('address-neighborhood').value = propertyData.address.neighborhood;
+            document.getElementById('address-city').value = propertyData.address.city;
+            document.getElementById('address-state').value = propertyData.address.state;
+            document.getElementById('address-postal-code').value = propertyData.address.postalCode;
+        });
+
+        document.getElementById('edit-property-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Propriedade atualizada com sucesso!');
+            // Aqui, você pode implementar a lógica para enviar os dados atualizados ao servidor.
+        });
+    </script>
+</body>
+
+</html>

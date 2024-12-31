@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Aluguel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 20px auto;
+            flex-grow: 1;
+            overflow-y: auto;
+            height: calc(100vh - 40px); /* Formulário ocupa toda a altura da tela */
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .input-group input, .input-group select {
+            width: 48%;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+
+        .back-button:before {
+            content: '←';
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-button" onclick="window.history.back()"></button>
+
+    <h3>Editar Aluguel</h3>
+
+    <form id="edit-rental-form">
+        <fieldset>
+            <legend>Informações do Aluguel</legend>
+            <label for="rental-number">Número do Aluguel</label>
+            <input type="text" id="rental-number" name="rental-number" readonly>
+
+            <label for="rental-value">Valor do Aluguel</label>
+            <input type="number" id="rental-value" name="rental-value" placeholder="R$ 0,00">
+
+            <label for="input-value">Valor de Entrada</label>
+            <input type="number" id="input-value" name="input-value" placeholder="R$ 0,00">
+
+            <label for="admin-value">Valor Administrativo</label>
+            <input type="number" id="admin-value" name="admin-value" placeholder="R$ 0,00">
+
+            <label for="due-date">Data de Vencimento</label>
+            <input type="date" id="due-date" name="due-date">
+
+            <label for="init-date">Data de Início</label>
+            <input type="date" id="init-date" name="init-date">
+
+            <label for="final-date">Data Final</label>
+            <input type="date" id="final-date" name="final-date">
+
+            <label for="type-warranty">Tipo de Garantia</label>
+            <select id="type-warranty" name="type-warranty">
+                <option value="DEPOSIT">Depósito</option>
+                <option value="SURETY">Fiador</option>
+                <option value="INSURANCE">Seguro</option>
+            </select>
+
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="ACTIVE">Ativo</option>
+                <option value="INACTIVE">Inativo</option>
+            </select>
+
+            <label for="paid">Pago</label>
+            <select id="paid" name="paid">
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Informações da Propriedade</legend>
+            <label for="property-number">Número da Propriedade</label>
+            <input type="text" id="property-number" name="property-number" readonly>
+
+            <label for="property-type">Tipo de Propriedade</label>
+            <input type="text" id="property-type" name="property-type" readonly>
+
+            <label for="property-status">Status</label>
+            <input type="text" id="property-status" name="property-status" readonly>
+        </fieldset>
+
+        <fieldset>
+            <legend>Informações do Locatário</legend>
+            <label for="tenant-name">Nome</label>
+            <input type="text" id="tenant-name" name="tenant-name" readonly>
+
+            <label for="tenant-cpf">CPF</label>
+            <input type="text" id="tenant-cpf" name="tenant-cpf" readonly>
+
+            <label for="tenant-phone">Telefone</label>
+            <input type="text" id="tenant-phone" name="tenant-phone" readonly>
+
+            <label for="tenant-email">Email</label>
+            <input type="email" id="tenant-email" name="tenant-email" readonly>
+        </fieldset>
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <script>
+        const rentalData = {
+            "rentalNumber": 1000001,
+            "rentalValue": 2300.0,
+            "inputValue": 200.0,
+            "adminValue": 200.0,
+            "dueDate": "2024-12-30T00:00:00",
+            "initDate": "2024-12-30T00:00:00",
+            "finalDate": "2024-12-30T00:00:00",
+            "typeWarranty": "DEPOSIT",
+            "status": "ACTIVE",
+            "paid": true,
+            "property": {
+                "propertyNumber": 1000001,
+                "typeProperty": "RESIDENTIAL",
+                "status": "RENTED"
+            },
+            "tenant": {
+                "person": {
+                    "cpf": "09738235693",
+                    "name": "João Silva",
+                    "phone": "+55 11 98765-4321",
+                    "email": "joao.silva@example.com"
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('rental-number').value = rentalData.rentalNumber;
+            document.getElementById('rental-value').value = rentalData.rentalValue;
+            document.getElementById('input-value').value = rentalData.inputValue;
+            document.getElementById('admin-value').value = rentalData.adminValue;
+            document.getElementById('due-date').value = rentalData.dueDate.split('T')[0];
+            document.getElementById('init-date').value = rentalData.initDate.split('T')[0];
+            document.getElementById('final-date').value = rentalData.finalDate.split('T')[0];
+            document.getElementById('type-warranty').value = rentalData.typeWarranty;
+            document.getElementById('status').value = rentalData.status;
+            document.getElementById('paid').value = rentalData.paid.toString();
+
+            document.getElementById('property-number').value = rentalData.property.propertyNumber;
+            document.getElementById('property-type').value = rentalData.property.typeProperty;
+            document.getElementById('property-status').value = rentalData.property.status;
+
+            document.getElementById('tenant-name').value = rentalData.tenant.person.name;
+            document.getElementById('tenant-cpf').value = rentalData.tenant.person.cpf;
+            document.getElementById('tenant-phone').value = rentalData.tenant.person.phone;
+            document.getElementById('tenant-email').value = rentalData.tenant.person.email;
+        });
+
+        document.getElementById('edit-rental-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Aluguel atualizado com sucesso!');
+            // Aqui, você pode implementar a lógica para enviar os dados atualizados ao servidor.
+        });
+    </script>
+</body>
+
+</html>

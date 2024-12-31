@@ -14,7 +14,7 @@ function createMainWindow() {
             contextIsolation: false,
             webSecurity: true,
         },
-        autoHideMenuBar: true,
+       // autoHideMenuBar: true,
     });
 
     mainWindow.loadFile(path.join(__dirname, 'src', 'pages/index.html'));

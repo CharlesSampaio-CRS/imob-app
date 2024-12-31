@@ -66,7 +66,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
@@ -103,6 +104,17 @@
         .status-available img {
             filter: brightness(0) saturate(100%) invert(19%) sepia(97%) saturate(338%) hue-rotate(359deg) brightness(91%) contrast(88%);
         }
+
+        .edit-button {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .edit-button img {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
 
@@ -121,6 +133,7 @@
     <table>
         <thead>
             <tr>
+                <th>Ações</th>
                 <th>Número da Propriedade</th>
                 <th>Tipo de Propriedade</th>
                 <th>Proprietário</th>
@@ -128,119 +141,48 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
-            <tr>
-                <td>1000001</td>
-                <td>Residencial</td>
-                <td>João Silva</td>
-                <td>R$ 500.000,00</td>
-                <td class="status-icon status-rented">
-                    <img src="../assets/active.png" alt="Alugada">
-                    Alugada
-                </td>
-            </tr>
+        <tbody id="propertyTableBody">
+            <!-- Linhas geradas dinamicamente -->
         </tbody>
     </table>
+    <script type="module">
+       import { fetchProperties } from '../../services/propertyService.js';
+    
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+    
+        function renderProperties(properties) {
+            const tableBody = document.getElementById('propertyTableBody');
+            tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar novos dados
+    
+            properties.forEach(property => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <a class="edit-button" href="edit-property.html?id=${property.id}">
+                            <img src="../assets/edit.png" alt="Editar">
+                        </a>
+                    </td>
+                    <td>${property.propertyNumber || 'N/A'}</td>
+                    <td>${property.typeProperty || 'N/A'}</td>
+                    <td>${property.owner || 'N/A'}</td>
+                    <td>${formatCurrency(property.value || 0)}</td>
+                    <td>${property.status || 'N/A'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const properties = await fetchProperties();
+                renderProperties(properties);
+            } catch (error) {
+                console.error('Erro ao renderizar propriedades:', error);
+            }
+        });
+    </script>
 </body>
 
 </html>

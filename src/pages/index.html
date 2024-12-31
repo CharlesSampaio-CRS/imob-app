@@ -149,7 +149,7 @@
             <div class="sidebar-item" id="tenant" title="Inquilino">
                 <img src="../assets/tenant.png" alt="Inquilino" class="icon">
             </div>
-            <div class="sidebar-item" id="graficos" title="Gráfico">
+            <div class="sidebar-item" id="chart" title="Gráfico">
                 <img src="../assets/chart.png" alt="Gráfico" class="icon">
             </div>
             <div class="sidebar-item" id="configuration" title="Configuração">
@@ -256,6 +256,8 @@
                     targetPage = 'chart.html';
                 }else if (item.id === 'configuration') {
                     targetPage = 'configuration.html';
+                }else if (item.id === 'chart') {
+                    targetPage = 'chart.html';
                 }
 
                 if (targetPage) {
