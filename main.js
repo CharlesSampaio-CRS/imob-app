@@ -9,6 +9,7 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({
         width: 1600,  // Aumentando a largura da janela
         height: 1000, // Aumentando a altura da janela
+        icon: path.join(__dirname, './src/assets/rental.png'), // Altere para o caminho do seu ícone
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

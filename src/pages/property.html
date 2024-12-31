@@ -115,10 +115,37 @@
             width: 20px;
             height: 20px;
         }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            margin: 0;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="stats">
+        <span id="totalProperties">Total de Propriedades: 0</span>
+        <span id="totalAvailable">Disponíveis: 0</span>
+        <span id="totalRented">Locadas: 0</span>
+    </div>
     <h3>Propriedades</h3>
     <div class="actions">
         <div class="search-bar">
@@ -145,6 +172,7 @@
             <!-- Linhas geradas dinamicamente -->
         </tbody>
     </table>
+
     <script type="module">
        import { fetchProperties } from '../../services/propertyService.js';
     
@@ -154,6 +182,10 @@
     
         function renderProperties(properties) {
             const tableBody = document.getElementById('propertyTableBody');
+            const totalProperties = properties.length;
+            let totalAvailable = 0;
+            let totalRented = 0;
+    
             tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar novos dados
     
             properties.forEach(property => {
@@ -168,10 +200,27 @@
                     <td>${property.typeProperty || 'N/A'}</td>
                     <td>${property.owner || 'N/A'}</td>
                     <td>${formatCurrency(property.value || 0)}</td>
-                    <td>${property.status || 'N/A'}</td>
+                    <td class="status-icon">
+                        ${property.status === 'RENTED' 
+                            ? `<img src="../assets/red.png" alt="Locado" title="Locado"> Locado` 
+                            : `<img src="../assets/green.png" alt="Disponível" title="Disponível"> Disponível`
+                        }
+                    </td>
                 `;
                 tableBody.appendChild(row);
+
+                // Contabiliza o total de disponíveis e alugados
+                if (property.status === 'AVAILABLE') {
+                    totalAvailable++;
+                } else if (property.status === 'RENTED') {
+                    totalRented++;
+                }
             });
+
+            // Exibe os totais
+            document.getElementById('totalProperties').textContent = `Total de Propriedades: ${totalProperties}`;
+            document.getElementById('totalAvailable').textContent = `Disponíveis: ${totalAvailable}`;
+            document.getElementById('totalRented').textContent = `Locadas: ${totalRented}`;
         }
     
         document.addEventListener('DOMContentLoaded', async () => {

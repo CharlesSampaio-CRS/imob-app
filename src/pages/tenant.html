@@ -111,10 +111,37 @@
             height: 20px;
             cursor: pointer;
         }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            margin: 0;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="stats">
+        <span id="totalTenants">Total de Inquilinos: 0</span>
+        <span id="totalActive">Ativos: 0</span>
+        <span id="totalInactive">Inativos: 0</span>
+    </div>
     <h3>Inquilinos</h3>
     <div class="actions">
         <div class="search-bar">
@@ -131,7 +158,6 @@
             <tr>
                 <th>Ações</th>
                 <th>CPF</th>
-                <th>Nº Inquilino</th>
                 <th>Nome</th>
                 <th>Status</th>
             </tr>
@@ -145,6 +171,10 @@
 
         function renderTenants(tenants) {
             const tableBody = document.getElementById('tenantTableBody');
+            const totalTenants = tenants.length;
+            let totalActive = 0;
+            let totalInactive = 0;
+
             tableBody.innerHTML = ''; 
 
             tenants.forEach(tenant => {
@@ -156,15 +186,28 @@
                         </a>
                     </td>
                     <td>${tenant.cpf || 'N/A'}</td>
-                    <td>${tenant.tenantNumber || 'N/A'}</td>
                     <td>${tenant.name || 'N/A'}</td>
-                    <td class="status-icon ${tenant.status ? 'status-active' : 'status-inactive'}">
-                        <img src="../assets/${tenant.status ? 'active' : 'inactive'}.png" alt="${tenant.status ? 'Ativo' : 'Inativo'}">
-                        ${tenant.status ? 'Ativo' : 'Inativo'}
-                    </td>
+                    <td class="status-icon">
+                            ${tenant.status === 'ACTIVE' 
+                                ? `<img src="../assets/green.png" alt="Ativo" title="Ativo"> Ativo` 
+                                : `<img src="../assets/red.png" alt="Inativo" title="Inativo"> Inativo`
+                            }
+                        </td>
                 `;
                 tableBody.appendChild(row);
+
+                // Contabiliza os totais de ativos e inativos
+                if (tenant.status === 'ACTIVE') {
+                    totalActive++;
+                } else if (tenant.status === 'INACTIVE') {
+                    totalInactive++;
+                }
             });
+
+            // Atualiza os totais na interface
+            document.getElementById('totalTenants').textContent = `Total de Inquilinos: ${totalTenants}`;
+            document.getElementById('totalActive').textContent = `Ativos: ${totalActive}`;
+            document.getElementById('totalInactive').textContent = `Inativos: ${totalInactive}`;
         }
 
         document.addEventListener('DOMContentLoaded', () => {

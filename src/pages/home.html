@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h3 {
+            color: #2c3e50;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            margin: 0;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .add-button {
+            display: none;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            height: 300px;
+        }
+
+        .edit-button {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .edit-button img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stats">
+        <div class="stat-item" id="rentalStat">
+            <h4>Aluguel Pago</h4>
+            <p id="totalRentalValue">R$ 0,00</p>
+        </div>
+        <div class="stat-item" id="activeTenantStat">
+            <h4>Inquilinos Ativos</h4>
+            <p id="activeTenantCount">0</p>
+        </div>
+        <div class="stat-item" id="rentalCountStat">
+            <h4>Locações</h4>
+            <p id="rentalCount">0</p>
+        </div>
+        <div class="stat-item" id="propertyCountStat">
+            <h4>Propriedades</h4>
+            <p id="propertyCount">0</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="propertyChart"></canvas>
+    </div>
+
+    <script type="module">
+        import { fetchProperties } from '../../services/propertyService.js';
+        import { fetchTenants } from '../../services/tenantService.js';
+        import { fetchRentals } from '../../services/rentalService.js';
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+
+        function updateStats(tenants, rentals, properties) {
+            const totalRentalValue = document.getElementById('totalRentalValue');
+            const activeTenantCount = document.getElementById('activeTenantCount');
+            const rentalCount = document.getElementById('rentalCount');
+            const propertyCount = document.getElementById('propertyCount');
+
+            const totalValue = rentals.reduce((sum, rental) => sum + (rental.rentalValue || 0), 0);
+            totalRentalValue.textContent = formatCurrency(totalValue);
+
+            const activeTenants = tenants.filter(tenant => tenant.status === 'ACTIVE');
+            activeTenantCount.textContent = activeTenants.length;
+
+            rentalCount.textContent = rentals.length;
+            propertyCount.textContent = properties.length;
+        }
+
+        function renderPropertyChart(properties) {
+            const ctx = document.getElementById('propertyChart').getContext('2d');
+
+            const groupedByDay = properties.reduce((acc, property) => {
+                const date = new Date(property.createdAt);
+                const day = date.toLocaleDateString();
+                
+                if (!acc[day]) {
+                    acc[day] = 0;
+                }
+                acc[day]++;
+                return acc;
+            }, {});
+
+            const days = Object.keys(groupedByDay).sort((a, b) => new Date(a) - new Date(b));
+            const counts = days.map(day => groupedByDay[day]);
+
+            const totalPropertiesInMonth = properties.length;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: [
+                        {
+                            label: 'Propriedades Cadastradas por dia',
+                            data: counts,
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderColor: '#3498db',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: `Total de Propriedades no Mês: ${totalPropertiesInMonth}`,
+                            data: new Array(days.length).fill(totalPropertiesInMonth),
+                            borderColor: '#e74c3c',
+                            borderWidth: 2,
+                            fill: false,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const properties = await fetchProperties();
+                const tenants = await fetchTenants();
+                const rentals = await fetchRentals();
+
+                updateStats(tenants, rentals, properties);
+                renderPropertyChart(properties);
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const rentalStat = document.getElementById('rentalStat');
+            rentalStat.addEventListener('click', () => {
+                window.location.href = 'rental.html';
+            });
+
+            const activeTenantStat = document.getElementById('activeTenantStat');
+            activeTenantStat.addEventListener('click', () => {
+                window.location.href = 'tenant.html';
+            });
+
+            const rentalCountStat = document.getElementById('rentalCountStat');
+            rentalCountStat.addEventListener('click', () => {
+                window.location.href = 'rental.html';
+            });
+
+            const propertyCountStat = document.getElementById('propertyCountStat');
+            propertyCountStat.addEventListener('click', () => {
+                window.location.href = 'property.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

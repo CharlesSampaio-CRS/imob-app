@@ -177,10 +177,57 @@
             }
         }
 
-        function saveProperty(event) {
+        async function saveProperty(event) {
             event.preventDefault(); // Evita o envio do formulário padrão
-            alert('Imóvel salvo com sucesso!');
+
+            const propertyData = {
+                typeProperty: document.getElementById('typeProperty').value,
+                value: parseFloat(document.getElementById('value').value),
+                address: {
+                    street: document.getElementById('street').value,
+                    number: document.getElementById('number').value,
+                    complement: document.getElementById('complement').value,
+                    neighborhood: document.getElementById('neighborhood').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    country: document.getElementById('country').value,
+                    postalCode: document.getElementById('postalCode').value
+                },
+                owner: {
+                    cpf: document.getElementById('cpf').value,
+                    name: document.getElementById('ownerName').value,
+                    phone: document.getElementById('ownerPhone').value,
+                    email: document.getElementById('ownerEmail').value,
+                    birthDate: document.getElementById('birthDate').value,
+                    naturalness: document.getElementById('naturalness').value,
+                    nationality: document.getElementById('nationality').value,
+                    admissionDate: document.getElementById('admissionDate').value,
+                    salary: parseFloat(document.getElementById('salary').value)
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/api/property', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(propertyData)
+                });
+
+                if (response.ok) {
+                    alert('Imóvel salvo com sucesso!');
+                } else {
+                    alert('Erro ao salvar o imóvel!');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar os dados:', error);
+                alert('Erro ao salvar o imóvel!');
+            }
         }
+
+        // Adiciona o evento de envio ao formulário
+        document.getElementById('propertyForm').addEventListener('submit', saveProperty);
     </script>
 </body>
 

@@ -7,7 +7,6 @@
     <title>Lista de Aluguéis</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        /* Suas estilizações anteriores */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -94,17 +93,9 @@
         }
 
         .status-icon img {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             margin-right: 5px;
-        }
-
-        .status-active img {
-            filter: brightness(0) saturate(100%) invert(43%) sepia(84%) saturate(400%) hue-rotate(106deg) brightness(97%) contrast(95%);
-        }
-
-        .status-inactive img {
-            filter: brightness(0) saturate(100%) invert(19%) sepia(97%) saturate(338%) hue-rotate(359deg) brightness(91%) contrast(88%);
         }
 
         .edit-button {
@@ -118,11 +109,39 @@
             width: 20px;
             height: 20px;
         }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            margin: 0;
+        }
+
+        .stat-item p {
+            font-size: 18px;
+        }
     </style>
 </head>
 
 <body>
-    <h3>Aluguéis</h3>
+    <div class="stats">
+        <span id="totalRentals">Total de Locações: 0</span>
+        <span id="totalActive">Ativas: 0</span>
+        <span id="totalInactive">Finalizadas: 0</span>
+        <span id="totalBlocked">Bloqueadas: 0</span>
+    </div>
+    <h3>Locações</h3>
     <div class="actions">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Pesquisar aluguel...">
@@ -140,7 +159,6 @@
                 <th>Número do Aluguel</th>
                 <th>Nome do Inquilino</th>
                 <th>Número do Imóvel</th>
-                <th>Valor do Imóvel</th>
                 <th>Valor do Aluguel</th>
                 <th>Data de Vencimento</th>
                 <th>Data de Início</th>
@@ -149,43 +167,59 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody id="rentalTableBody">
-            <!-- Dados serão preenchidos dinamicamente -->
-        </tbody>
+        <tbody id="rentalTableBody"></tbody>
     </table>
+
     <script type="module">
         import { fetchRentals } from '../../services/rentalService.js';
-    
+
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
         }
-    
+
         function renderRentals(rentals) {
             const tableBody = document.getElementById('rentalTableBody');
-            tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar novos dados
-    
+            const totalRentals = rentals.length;
+            let totalActive = 0, totalInactive = 0, totalBlocked = 0;
+
+            tableBody.innerHTML = '';
+
             rentals.forEach(rental => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><a class="edit-button" href="edit-rental.html?id=${rental.tenantNumber}"><img src="../assets/edit.png" alt="Editar"></a></td>
+                    <td><a class="edit-button" href="edit-rental.html?id=${rental.rentalNumber}"><img src="../assets/edit.png" alt="Editar"></a></td>
                     <td>${rental.rentalNumber || 'N/A'}</td>
                     <td>${rental.tenantName || 'N/A'}</td>
                     <td>${rental.propertyNumber || 'N/A'}</td>
-                    <td>${formatCurrency(rental.propertyValue || 0)}</td>
                     <td>${formatCurrency(rental.rentalValue || 0)}</td>
                     <td>${rental.dueDate ? new Date(rental.dueDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     <td>${rental.initDate ? new Date(rental.initDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     <td>${rental.finalDate ? new Date(rental.finalDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     <td>${rental.typeWarranty || 'N/A'}</td>
-                    <td class="status-icon ${rental.paid ? 'status-active' : 'status-inactive'}">
-                        <img src="../assets/${rental.paid ? 'active' : 'inactive'}.png" alt="${rental.paid ? 'Ativo' : 'Inativo'}">
-                        ${rental.paid ? 'Ativo' : 'Inativo'}
+                    <td class="status-icon">
+                        ${rental.status === 'ACTIVE' 
+                            ? `<img src="../assets/green.png" alt="Ativo" title="Ativo"> Ativo` 
+                            : rental.status === 'INACTIVE'
+                            ? `<img src="../assets/red.png" alt="Finalizado" title="Finalizado"> Finalizado`
+                            : rental.status === 'BLOCKED'
+                            ? `<img src="../assets/inactive.png" alt="Bloqueado" title="Bloqueado"> Bloqueado`
+                            : `<img src="../assets/default.png" alt="Indefinido" title="Indefinido"> Indefinido`
+                        }
                     </td>
                 `;
                 tableBody.appendChild(row);
+
+                if (rental.status === 'ACTIVE') totalActive++;
+                if (rental.status === 'INACTIVE') totalInactive++;
+                if (rental.status === 'BLOCKED') totalBlocked++;
             });
+
+            document.getElementById('totalRentals').textContent = `Total de Aluguéis: ${totalRentals}`;
+            document.getElementById('totalActive').textContent = `Ativos: ${totalActive}`;
+            document.getElementById('totalInactive').textContent = `Finalizados: ${totalInactive}`;
+            document.getElementById('totalBlocked').textContent = `Bloqueados: ${totalBlocked}`;
         }
-    
+
         async function fetchAndRenderRentals() {
             try {
                 const rentals = await fetchRentals();
@@ -194,7 +228,7 @@
                 console.error('Erro ao buscar aluguéis:', error);
             }
         }
-    
+
         document.addEventListener('DOMContentLoaded', fetchAndRenderRentals);
     </script>
 </body>

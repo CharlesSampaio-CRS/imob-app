@@ -149,9 +149,6 @@
             <div class="sidebar-item" id="tenant" title="Inquilino">
                 <img src="../assets/tenant.png" alt="Inquilino" class="icon">
             </div>
-            <div class="sidebar-item" id="chart" title="Gráfico">
-                <img src="../assets/chart.png" alt="Gráfico" class="icon">
-            </div>
             <div class="sidebar-item" id="configuration" title="Configuração">
                 <img src="../assets/config.png" alt="Configuração" class="icon">
             </div>
@@ -163,7 +160,7 @@
     </div>
 
     <div id="content">
-        <iframe id="content-frame" src=""></iframe>
+        <iframe id="content-frame" src="home.html"></iframe>
     </div>
 
     <!-- Ícone da Calculadora -->
@@ -242,10 +239,10 @@
                     return;
                 }
 
-                let targetPage = '';
+                let targetPage = 'home.html';
 
                 if (item.id === 'home') {
-                    targetPage = 'page-home.html';
+                    targetPage = 'home.html';
                 } else if (item.id === 'whats') {
                     targetPage = 'property.html';
                 } else if (item.id === 'tenant') {
@@ -254,10 +251,8 @@
                     targetPage = 'rental.html';
                 } else if (item.id === 'graficos') {
                     targetPage = 'chart.html';
-                }else if (item.id === 'configuration') {
+                } else if (item.id === 'configuration') {
                     targetPage = 'configuration.html';
-                }else if (item.id === 'chart') {
-                    targetPage = 'chart.html';
                 }
 
                 if (targetPage) {

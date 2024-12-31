@@ -6,7 +6,10 @@ export async function fetchProperties() {
         if (!response.ok) {
             throw new Error('Erro ao buscar propriedades');
         }
-        return await response.json();
+
+        const properties = await response.json();
+        return properties;
+
     } catch (error) {
         console.error('Erro ao buscar propriedades:', error);
         throw error;

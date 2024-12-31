@@ -6,9 +6,22 @@ export async function fetchRentals() {
         if (!response.ok) {
             throw new Error('Erro ao buscar locações');
         }
-        return await response.json();
+
+        const rentals = await response.json();
+
+        // Ordena as locações por status
+        rentals.sort((a, b) => {
+            if (a.status === 'AVAILABLE' && b.status === 'RENTED') {
+                return -1; // Disponível vem antes
+            } else if (a.status === 'RENTED' && b.status === 'AVAILABLE') {
+                return 1; // Alugado vem depois
+            }
+            return 0; // Se ambos tiverem o mesmo status, a ordem não é alterada
+        });
+
+        return rentals;
     } catch (error) {
-        console.error('Erro ao buscar propriedades:', error);
+        console.error('Erro ao buscar locações:', error);
         throw error;
     }
 }

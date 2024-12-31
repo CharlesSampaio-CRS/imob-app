@@ -6,7 +6,17 @@ export async function fetchTenants() {
         if (!response.ok) {
             throw new Error('Erro ao buscar Inquilinos');
         }
-        return await response.json();
+        const tenants = await response.json();
+        tenants.sort((a, b) => {
+            if (a.status === 'ACTIVE' && b.status === 'INACTIVE') {
+                return -1; 
+            } else if (a.status === 'INACTIVE' && b.status === 'ACTIVE') {
+                return 1; 
+            }
+            return 0;
+        });
+        
+        return tenants;
     } catch (error) {
         console.error('Erro ao buscar Inquilinos:', error);
         throw error;
