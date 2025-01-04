@@ -149,8 +149,8 @@
         <label for="adminValue">Valor de Administração</label>
         <input type="number" id="adminValue" placeholder="Valor de administração" required>
 
-        <label for="dueDate">Data de Vencimento</label>
-        <input type="date" id="dueDate" required>
+        <label for="dueDate">Dia de Vencimento</label>
+        <input type="number" id="dueDate" required>
 
         <label for="paid">Pago?</label>
         <select id="paid" required>
@@ -278,9 +278,6 @@
     let finalDate = document.getElementById('finalDate').value;
     const typeWarranty = document.getElementById('typeWarranty').value;
 
-    if (dueDate) {
-        dueDate += "T00:00:00"; // Adiciona a hora para garantir o formato LocalDateTime
-    }
     if (initDate) {
         initDate += "T00:00:00"; // Adiciona a hora para garantir o formato LocalDateTime
     }
@@ -301,7 +298,6 @@
         typeWarranty
     };
 
-    console.log(rentalData)
     try {
         // Realiza a requisição POST para salvar o aluguel
         const response = await fetch('http://localhost:8080/api/rental', {
@@ -314,8 +310,7 @@
 
         if (response.ok) {
             const data = await response.json();
-            alert("Aluguel salvo com sucesso!");
-            console.log("Aluguel salvo:", data);
+            window.history.back();
         } else {
             alert("Erro ao salvar aluguel. Tente novamente.");
             console.error("Erro ao salvar aluguel:", response.statusText);

@@ -157,8 +157,8 @@
         <thead>
             <tr>
                 <th>Ações</th>
-                <th>CPF</th>
                 <th>Nome</th>
+                <th>CPF</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -185,8 +185,8 @@
                             <img src="../assets/edit.png" alt="Editar">
                         </a>
                     </td>
-                    <td>${tenant.cpf || 'N/A'}</td>
                     <td>${tenant.name || 'N/A'}</td>
+                                       <td>${tenant.cpf || 'N/A'}</td>
                     <td class="status-icon">
                             ${tenant.status === 'ACTIVE' 
                                 ? `<img src="../assets/green.png" alt="Ativo" title="Ativo"> Ativo` 
