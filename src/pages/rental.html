@@ -156,11 +156,11 @@
         <thead>
             <tr>
                 <th>Ações</th>
-                <th>Número do Aluguel</th>
-                <th>Nome do Inquilino</th>
-                <th>Número do Imóvel</th>
-                <th>Valor do Aluguel</th>
-                <th>Data de Vencimento</th>
+                <th>Aluguel</th>
+                <th>Inquilino</th>
+                <th>Código Imóvel</th>
+                <th>Aluguel R$</th>
+                <th>Vencimento</th>
                 <th>Data de Início</th>
                 <th>Data Final</th>
                 <th>Tipo de Garantia</th>
@@ -192,7 +192,7 @@
                     <td>${rental.tenantName || 'N/A'}</td>
                     <td>${rental.propertyNumber || 'N/A'}</td>
                     <td>${formatCurrency(rental.rentalValue || 0)}</td>
-                    <td>${rental.dueDate ? new Date(rental.dueDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
+                    <td>${rental.dueDate}</td>
                     <td>${rental.initDate ? new Date(rental.initDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     <td>${rental.finalDate ? new Date(rental.finalDate).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     <td>${rental.typeWarranty || 'N/A'}</td>
